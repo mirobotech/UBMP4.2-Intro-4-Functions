@@ -81,7 +81,7 @@ int main(void)
             LED4Brightness -= 1;
         }
 
-        // PWM LED5 with current brightness
+        // PWM LED4 with current brightness
         pwm_LED4(LED4Brightness);
         
         // Activate bootloader if SW1 is pressed.
@@ -127,7 +127,7 @@ int main(void)
  * 
  *      The compiler should have reported an error since it had not encountered
  *      the functions before trying to compiler the function call statements.
- *      We can eradicate this error by adding function prototype statements
+ *      We can eliminate this error by adding function prototype statements
  *      above the main() function in the code.
  * 
  *      The function prototype is almost a copy the function declaration (the
@@ -140,8 +140,8 @@ int main(void)
  * 
  *      Let's try this out. Leave the functions in their new location, below
  *      the main() function, and add the two function prototype statements, 
- *      below, above the code in the main() function. In other words, add them
- *      in the location where the functions were originally located:
+ *      below, above the code in the main() function. In other words, add these
+ *      in the functions' original location, above the main() function:
 
 unsigned char read_button(void);
 
@@ -166,7 +166,7 @@ void pwm_LED4(unsigned char);
  *      library function code.
  * 
  *      The '#include "UBMP420.h"' statement near the top of this program is an
- *      example of a statement that does excactly this, adding external
+ *      example of a statement that does exactly this, adding external
  *      functions into our program. The 'UBMP420.h' file contains function
  *      prototypes for the functions located in the 'UBMP420.c' file, along
  *      with various symbolic constants used by both the main program in this
