@@ -1,6 +1,6 @@
 /*==============================================================================
- Project: Intro-4-Functions
- Date:    April 2, 2022
+ Project: Intro-4-Functions             Activity: mirobo.tech/ubmp4-intro-4
+ Date:    January 20, 2023
  
  This program demonstrates the use of functions, and variable passing between
  the main and function code.
