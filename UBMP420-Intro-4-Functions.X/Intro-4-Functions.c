@@ -1,13 +1,14 @@
 /*==============================================================================
  Project: Intro-4-Functions             Activity: mirobo.tech/ubmp4-intro-4
- Date:    January 20, 2023
+ Date:    February 13, 2023
  
- This program demonstrates the use of functions, and variable passing between
- the main and function code.
+ This introductory programming activity for the mirobo.tech UBMP4 demonstrates
+ the use of functions, and the ability to pass variables between the main code
+ and the function code.
  
  Additional program analysis and programming activities examine function code
- location, function prototypes, and reinforce the concepts of global and local
- variables.
+ location within the program, the use of function prototypes, and reinforce the
+ concepts of local and global variables.
 ==============================================================================*/
 
 #include    "xc.h"              // Microchip XC8 compiler include file
