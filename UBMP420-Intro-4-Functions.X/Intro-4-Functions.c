@@ -1,14 +1,14 @@
 /*==============================================================================
  Project: Intro-4-Functions             Activity: mirobo.tech/ubmp4-intro-4
- Date:    February 13, 2023
+ Date:    May 9, 2023
  
  This introductory programming activity for the mirobo.tech UBMP4 demonstrates
- the use of functions, and the ability to pass variables between the main code
- and the function code.
+ the use of functions and the ability to pass variables between the program's
+ main code and the function code.
  
- Additional program analysis and programming activities examine function code
- location within the program, the use of function prototypes, and reinforce the
- concepts of local and global variables.
+ Additional program analysis and programming activities examine the location of
+ function code within the program, introduce function prototypes, and reinforce
+ the concepts of global and local variables and making sounds using loops.
 ==============================================================================*/
 
 #include    "xc.h"              // Microchip XC8 compiler include file
@@ -21,9 +21,9 @@
 // TODO Set linker code offset to '800' under "Additional options" pull-down.
 
 // Button constant definitions
-const char noButton = 0;
-const char UP = 1;
-const char DOWN = 2;
+#define NOBUTTON    0
+#define UP          1
+#define DOWN        2
 
 // Program variable definitions
 unsigned char LED4Brightness = 125;
@@ -35,13 +35,13 @@ unsigned char read_button(void)
     {
         return(UP);
     }
-    else if(SW5 == 0)
+    else if(SW3 == 0)
     {
         return(DOWN);
     }
     else
     {
-        return(noButton);
+        return(NOBUTTON);
     }
 }
 
@@ -98,11 +98,12 @@ int main(void)
 
 /* Learn More -- Program Analysis Activities
  * 
- * 1.   Which function in this program will run first? How do you know?
+ * 1.   There are three functions in this program. Which function will run
+ *      first? How do you know?
  * 
  * 2.   What is the purpose of the 'unsigned char' variable type declaration in
  *      the read_button() function? Is it used by the function to receive a
- *      variable from, or return a variable to the main code?
+ *      variable from the main code, or to return a variable to the main code?
  * 
  * 3.   How does the function call statement 'button = read_button();' in the
  *      main code support your answer in 2, above?
@@ -112,113 +113,134 @@ int main(void)
  * 
  * 5.   What is the purpose of the 'unsigned char' variable type declaration in
  *      the pwm_LED4() function? Where does the value of the variable come from?
- *      Which variable in the function does this value get stored in?
+ *      Which variable in the function stores this value?
  * 
  * 6.   C language compilers typically read through an entire program file in a
- *      single pass, converting C code into machine code. The two functions,
- *      read_button() and pwm_LED4(), are located above the main() function
- *      so that the memory locations and variables will be defined as they are
- *      compiled, and before the rest of the program is compiled. When the
- *      compiler later encounters a function call statement to one of the
- *      functions, it knows how to access them.
+ *      single pass, converting the C code into machine code. The two functions
+ *      read_button() and pwm_LED4() are located above the main() function so
+ *      that their memory locations and variables will be defined as they are
+ *      compiled, before the rest of the program is compiled. When the compiler
+ *      later encounters a function call statement to one of the functions, it
+ *      already knows the functions exist, and how to access their code.
  * 
  *      Try moving the read_button() and pwm_LED4() functions to the end of the
  *      program, below the closing brace of the main() function, and build the
- *      code. What happens?
+ *      program in MPLAB. What happens?
  * 
  *      The compiler should have reported an error since it had not encountered
- *      the functions before trying to compiler the function call statements.
- *      We can eliminate this error by adding function prototype statements
- *      above the main() function in the code.
+ *      the functions before trying to compile the function call statements in
+ *      the main code. This error can be eliminated by adding function prototype
+ *      statements above the main() function in the code.
  * 
- *      The function prototype is almost a copy the function declaration (the
- *      first line of the function), and informs the compiler about both the
- *      function's name as well as the number and type of variables that the
- *      function will use. A C language 'linker' program will take care of
- *      sorting out the names and memory locations of all of the functions and
- *      variables in a program, and arranging them into the microcontroller's
- *      memory following the compilation step.
+ *      A function prototype is an 'empty' copy the function declaration (the
+ *      first line of the function). The purpose served by a function prototype
+ *      is to inform the compiler about both the name of a function that the
+ *      compiler will encounter, as well as the number and type of variables
+ *      that the function will use. A C language linker program will take care
+ *      of sorting out the names and memory locations of all of the functions
+ *      and variables used in a program, and arranges them in the proper order
+ *      in the microcontroller's memory following the compilation step.
  * 
- *      Let's try this out. Leave the functions in their new location, below
- *      the main() function, and add the two function prototype statements, 
- *      below, above the code in the main() function. In other words, add these
- *      in the functions' original location, above the main() function:
+ *      Let's explore how this works. Leave the functions in their new location,
+ *      below the main() function, and add the two function prototype
+ *      statements, below, above the code in the main() function. In other
+ *      words, add these two lines to the original location of the functions in
+ *      the program, above the main() function:
 
 unsigned char read_button(void);
 
 void pwm_LED4(unsigned char);
 
- *      What is the difference between the function prototype for pwm_LED4()
- *      and the actual pwm_LED4() function declaration statement later in the
- *      code?
+ *      The function prototype for the pwm_LED4() function is slightly different
+ *      than the actual function declaration statement which is now lower in the
+ *      program code. Can you identify the difference and, thinking about the
+ *      liner operation described earlier, provide a reason why the difference
+ *      is not a concern at this point in the compilation?
  * 
  *      Building the program now, with the added function prototypes, should
  *      work without generating errors just as it did in the original program.
+ *      Try it!
  * 
- * 7.   In C, functions may be located before the code that calls them, after
- *      their function calls if a function prototype is supplied before the
- *      function call, or even in completely separate files known as function
- *      libraries.
+ * 7.   In the C language, functions may be located above the code that calls
+ *      them, below their function call statements if a function prototype is
+ *      supplied before the function call (as seen in 6, above), or even in
+ *      completely separate files known as function libraries.
  * 
- *      Function libraries are typically joined to your project's main '.c' 
- *      file using an 'include' statement specifying a '.h' header file. The
- *      header file contains both the variable definitions and the function
- *      prototypes for an associated .c file, which contains the additional
- *      library function code.
+ *      Function libraries are separately saved '.c' files which are typically
+ *      joined to your project's main '.c' file using 'include' statements that
+ *      specify a '.h' header file. The header file contains both the variable
+ *      definitions and the function prototypes for the associated .c file 
+ *      containing the library function code, and usually contains comments and
+ *      descriptions relating to the purpose and use of the functions.
  * 
- *      The '#include "UBMP420.h"' statement near the top of this program is an
- *      example of a statement that does exactly this, adding external
- *      functions into our program. The 'UBMP420.h' file contains function
- *      prototypes for the functions located in the 'UBMP420.c' file, along
+ *      The statement '#include "UBMP420.h"' near the top of this program (and
+ *      all of the other Introductory programs), adds external functions into
+ *      the main program. The 'UBMP420.h' file contains function prototypes and
+ *      other details about the functions located in the 'UBMP420.c' file, along
  *      with various symbolic constants used by both the main program in this
- *      source code file, as well as and the program code in the UBMP420.c file.
+ *      source code file, as well as the program code in the UBMP420.c file.
  * 
- *      Open the UBMP420.c file to find the OSC_config() and UBMP4_config()
- *      functions called from the main() function in this program. Are any
- *      values passed between this code and the two setup functions? How do
- *      you know?
+ *      Open the UBMP420.c file in the code editor and you will find both the
+ *      OSC_config() and UBMP4_config() functions called from this program's
+ *      main() function. Are any values passed between this code and the two
+ *      config functions? How do you know?
  * 
  * 8.   The 'button' variable is a global variable because it was assigned
- *      at the beginning of the program, outside of any functions. Global
+ *      at the beginning of this program, outside of any functions. Global
  *      variables are available to all functions. How does the 'button'
  *      variable get assigned a value? In which function does this occur?
  * 
  * 9.   Which variable does the value of LED4Brightness get transferred to in
  *      the pwm_LED4() function? Is this variable global, or local to the LED
  *      function? Could the pwm_LED4() function use the LED4Brightness variable
- *      directly, instead of transferring its value to another variable?
+ *      directly, instead of transferring its value to another variable first?
+ *      What would happen to the value of the LED4Brightness variable if it was
+ *      used in the pwm_LED4() function?
  * 
  * Programming Activities
  * 
  * 1.   It might be useful to have a button that instantly turns LED D4 fully
  *      on or off instead of waiting for it to brighten and dim while the UP
  *      and DOWN buttons are held to change the PWM duty cycle. But, PWM dimming
- *      dimming capability is still a useful feature that should be retained.
+ *      dimming capability is also a useful feature that should be retained.
  * 
- *      Modify the read_button() and main() functions to use SW3 as an
- *      instant-on button, and SW2 as an instant-off button. Pressing either of
+ *      Modify the read_button() and main() functions to use SW2 as an
+ *      instant-on button, and SW5 as an instant-off button. Pressing either of
  *      these buttons should over-write the current LED4Brightness value with
- *      either 255 or 0, while still allowing SW4 and SW5 to adjust the
- *      brightness in smaller increments when pressed.
+ *      either 255 or 0, while still allowing SW3 and SW4 to adjust the
+ *      brightness smoothly and in smaller increments when pressed.
  *
- * 2.   Create a new program with a function that will return a number from 1-4
- *      corresponding to which of the SW2 to SW5 switches is pressed, or return
- *      0 if no switches are pressed. Then, create a second function that will
- *      accept a number from 1 to 4 that lights the corresponding LED beside
- *      each button. A value of 0 should turn off all of the lights. 
+ * 2.   Create a new program that uses functions to turn on one LED for each
+ *      pushbutton while the button is being pressed, and to turn off the LEDs
+ *      when all of the buttons are released.
  * 
- * 3.   Create a sound function that receives a parameter representing a tone's
- *      period. Modify your button function, above, to return a variable that
- *      will be passed to the sound function to make four different tones.
+ *      Start by creating a function that will return a number from 1-4 
+ *      corresponding to which of the SW2 to SW5 pushbuttons is being pressed,
+ *      or that returns a value of 0 if no buttons are pressed. Then, create a
+ *      second function that will accept a number from 0 to 4 which will turn
+ *      off all of the LEDs in response to a 0 input or light the corresponding
+ *      LED for each pushbutton when receiving the numbers 1-4.
+  * 
+ * 3.   Create a four note music player using two functions, one to read the
+ *      pushbutons (similar to Activity 2, above), and a second to play a sound
+ *      on the piezo beeper using a loop.
  * 
- * 4.   A function that converts an 8-bit binary value into its 3-digit decimal
- *      equivalent might be useful for helping us to debug our programs. Create
- *      a function that converts an 8-bit binary number into three decimal
- *      character variables representing the hundreds, tens, and ones digits
- *      of a binary number passed to it. For example, passing the function
- *      a value of 142 will result in the hundreds variable containing the
- *      value 1, the tens variable containing 4, and the ones variable 2. How
- *      could you test this function to verify that it works? Try it! (Hint:
- *      the BCD number system can represent the decimal digits 0-9 using only
- *      4 bits. Can you display the BCD digits on the LEDs?)
+ *      Start by creating a sound function that will receive a parameter
+ *      representing a tone's period or pitch. Then, modify the pushbutton
+ *      function to return a different period or pitch in response to each
+ *      button being pressed. You could even modify your pushbutton function to
+ *      respond to multiple, simultaneous button presses so that your program
+ *      is able to play more than four notes using just the four buttons!
+ * 
+ * 4.   A function that converts an 8-bit binary value into its equivalent
+ *      3-digit decimal number might be useful for helping us to debug our
+ *      programs (as you will see in the next activity). Create a function that
+ *      converts an 8-bit binary number into three decimal character variables
+ *      representing the hundreds, tens, and ones digits of a (binary) number
+ *      passed to it. For example, passing the function the value of 142 will
+ *      result in the hundreds variable containing the value 1, the tens
+ *      variable containing 4, and the ones variable 2. How could you test this
+ *      function to verify that it works? Try it! (Hint: the BCD number system
+ *      represents the decimal digits 0-9 using only 4 bits. Can you display
+ *      the equivalent BCD digits on the LEDs?)
  */
